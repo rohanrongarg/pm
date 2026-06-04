@@ -108,6 +108,25 @@ export const KanbanBoard = ({ board, onBoardChange }: KanbanBoardProps = {}) => 
     commitBoard(nextBoard);
   };
 
+  const handleUpdateCard = (cardId: string, title: string, details: string) => {
+    const existing = resolvedBoard.cards[cardId];
+    if (!existing) {
+      return;
+    }
+    const nextBoard = {
+      ...resolvedBoard,
+      cards: {
+        ...resolvedBoard.cards,
+        [cardId]: {
+          ...existing,
+          title,
+          details: details || "No details yet.",
+        },
+      },
+    };
+    commitBoard(nextBoard);
+  };
+
   const activeCard = activeCardId ? cardsById[activeCardId] : null;
 
   return (
@@ -167,6 +186,7 @@ export const KanbanBoard = ({ board, onBoardChange }: KanbanBoardProps = {}) => 
                 onRename={handleRenameColumn}
                 onAddCard={handleAddCard}
                 onDeleteCard={handleDeleteCard}
+                onUpdateCard={handleUpdateCard}
               />
             ))}
           </section>

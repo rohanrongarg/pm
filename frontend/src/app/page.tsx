@@ -29,8 +29,8 @@ export default function Home() {
   const [authLoading, setAuthLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const [loginUsername, setLoginUsername] = useState("user");
-  const [loginPassword, setLoginPassword] = useState("password");
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const [board, setBoard] = useState<BoardData | null>(null);
@@ -71,6 +71,13 @@ export default function Home() {
     };
     void init();
   }, []);
+
+  useEffect(() => {
+    if (!authLoading && !authenticated) {
+      setLoginUsername("");
+      setLoginPassword("");
+    }
+  }, [authLoading, authenticated]);
 
   const queueBoardSave = (nextBoard: BoardData) => {
     setBoard(nextBoard);
@@ -190,6 +197,7 @@ export default function Home() {
       <main className="flex min-h-screen items-center justify-center px-4">
         <form
           onSubmit={handleLogin}
+          autoComplete="off"
           className="w-full max-w-md rounded-3xl border border-[var(--stroke)] bg-white p-8 shadow-[var(--shadow)]"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--gray-text)]">
@@ -207,6 +215,7 @@ export default function Home() {
               className="mt-2 w-full rounded-xl border border-[var(--stroke)] px-3 py-2 outline-none focus:border-[var(--primary-blue)]"
               value={loginUsername}
               onChange={(event) => setLoginUsername(event.target.value)}
+              autoComplete="off"
             />
           </label>
           <label className="mt-4 block text-sm font-semibold text-[var(--navy-dark)]">
@@ -216,6 +225,7 @@ export default function Home() {
               className="mt-2 w-full rounded-xl border border-[var(--stroke)] px-3 py-2 outline-none focus:border-[var(--primary-blue)]"
               value={loginPassword}
               onChange={(event) => setLoginPassword(event.target.value)}
+              autoComplete="new-password"
             />
           </label>
           {loginError && (
